@@ -1,8 +1,14 @@
 package com.lna.literalura.principal;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.lna.literalura.model.DatosBusqueda;
 import com.lna.literalura.model.DatosLibro;
 import com.lna.literalura.service.ConsumoGutendexAPI;
 import com.lna.literalura.service.ConvierteDatos;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Principal {
@@ -10,7 +16,7 @@ public class Principal {
     private ConsumoGutendexAPI consumoAPI = new ConsumoGutendexAPI();
     private ConvierteDatos conversor = new ConvierteDatos();
 
-    public void muestraElMenu() {
+    public void muestraElMenu() throws JsonProcessingException {
         var opcion = -1;
         while (opcion != 0) {
             var menu = """
@@ -28,10 +34,15 @@ public class Principal {
 
             switch (opcion) {
                 case 1:
-                    String json = consumoAPI.obtenerDatos("https://gutendex.com/books/1");
-                    System.out.println(json);
-                    DatosLibro libro = conversor.obtenerDatos(json, DatosLibro.class);
-                    System.out.println(libro.id() + libro.titulo() + libro.autores() + libro.idiomas() + libro.cantidadDescargas());
+                    buscaLibro();
+//                    String json =
+//                    DatosBusqueda resultadoBusqueda = conversor.obtenerDatos(json, DatosBusqueda.class);
+//                    System.out.println(resultadoBusqueda);
+//                    ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//                    String jsonLibro = objectWriter.writeValueAsString(resultadoBusqueda.encontrados().get(0));
+//                    System.out.println(jsonLibro);
+//                    DatosLibro libro = conversor.obtenerDatos(jsonLibro, DatosLibro.class);
+//                    System.out.println(libro.id() + libro.titulo() + libro.autores() + libro.idiomas() + libro.cantidadDescargas());
                     break;
                 case 2:
                     break;
@@ -49,6 +60,18 @@ public class Principal {
             }
         }
 
+    }
+
+    private void buscaLibro() {
+        System.out.println("Ingrese el libro que desea buscar: ");
+        var libro = scanner.nextLine();
+        String jsonResultados = consumoAPI.obtenerDatos("https://gutendex.com/books/?search=" + libro);
+        DatosBusqueda resultados = conversor.obtenerDatos(jsonResultados, DatosBusqueda.class);
+        if (resultados.encontrados().isEmpty()) {
+            System.out.println("Libro no encontrado");
+        } else {
+            System.out.println(resultados.encontrados().get(0));
+        }
     }
 
 }
