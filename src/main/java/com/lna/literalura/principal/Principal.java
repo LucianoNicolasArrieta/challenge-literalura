@@ -1,26 +1,24 @@
 package com.lna.literalura.principal;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.lna.literalura.model.DatosBusqueda;
 import com.lna.literalura.model.DatosLibro;
+import com.lna.literalura.model.Libro;
 import com.lna.literalura.service.ConsumoGutendexAPI;
 import com.lna.literalura.service.ConvierteDatos;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Principal {
     private Scanner scanner = new Scanner(System.in);
     private ConsumoGutendexAPI consumoAPI = new ConsumoGutendexAPI();
     private ConvierteDatos conversor = new ConvierteDatos();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     public void muestraElMenu() throws JsonProcessingException {
         var opcion = -1;
         while (opcion != 0) {
             var menu = """
-                    \n1 -  Buscar libro por título
+                    \n1 - Buscar libro por título
                     2 - Listar libros registrados
                     3 - Listar autores registrados
                     4 - Listar autores vivos en un determinado año
@@ -34,15 +32,7 @@ public class Principal {
 
             switch (opcion) {
                 case 1:
-                    buscaLibro();
-//                    String json =
-//                    DatosBusqueda resultadoBusqueda = conversor.obtenerDatos(json, DatosBusqueda.class);
-//                    System.out.println(resultadoBusqueda);
-//                    ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-//                    String jsonLibro = objectWriter.writeValueAsString(resultadoBusqueda.encontrados().get(0));
-//                    System.out.println(jsonLibro);
-//                    DatosLibro libro = conversor.obtenerDatos(jsonLibro, DatosLibro.class);
-//                    System.out.println(libro.id() + libro.titulo() + libro.autores() + libro.idiomas() + libro.cantidadDescargas());
+                    buscarLibro();
                     break;
                 case 2:
                     break;
@@ -62,15 +52,22 @@ public class Principal {
 
     }
 
-    private void buscaLibro() {
-        System.out.println("Ingrese el libro que desea buscar: ");
-        var libro = scanner.nextLine();
+    private DatosLibro obtenerDatosLibro(String libro) {
         String jsonResultados = consumoAPI.obtenerDatos("https://gutendex.com/books/?search=" + libro);
-        DatosBusqueda resultados = conversor.obtenerDatos(jsonResultados, DatosBusqueda.class);
-        if (resultados.encontrados().isEmpty()) {
-            System.out.println("Libro no encontrado");
+        DatosLibro datosLibro = conversor.obtenerDatos(jsonResultados);
+
+        return datosLibro;
+    }
+
+    private void buscarLibro() {
+        System.out.println("Ingrese el libro que desea buscar: ");
+        var libroBuscado = scanner.nextLine();
+        DatosLibro datosLibro = obtenerDatosLibro(libroBuscado);
+        if (datosLibro != null) {
+            Libro libro = new Libro(datosLibro);
+            System.out.println(libro);
         } else {
-            System.out.println(resultados.encontrados().get(0));
+            System.out.println("Libro no encontrado");
         }
     }
 

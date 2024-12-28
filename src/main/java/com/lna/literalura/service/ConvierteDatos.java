@@ -1,17 +1,28 @@
 package com.lna.literalura.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lna.literalura.model.DatosLibro;
 
-public class ConvierteDatos implements IConvierteDatos {
+public class ConvierteDatos {
     private ObjectMapper mapper = new ObjectMapper();
 
-    @Override
-    public <T> T obtenerDatos(String json, Class<T> clase) {
+    public DatosLibro obtenerDatos(String resultadosBusqueda) {
+        DatosLibro datosLibro = null;
+
         try {
-            return mapper.readValue(json, clase);
+            JsonNode resultados = mapper.readTree(resultadosBusqueda);
+            JsonNode resultado = resultados.get("results");
+            JsonNode primerResultado = resultado.get(0);
+
+            datosLibro = mapper.treeToValue(primerResultado, DatosLibro.class);
+            //System.out.println(datosLibro);
+
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+
+        return datosLibro;
     }
 }
