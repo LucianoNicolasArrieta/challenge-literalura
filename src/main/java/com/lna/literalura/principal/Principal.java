@@ -2,6 +2,7 @@ package com.lna.literalura.principal;
 
 import com.lna.literalura.model.Autor;
 import com.lna.literalura.model.DatosLibro;
+import com.lna.literalura.model.Idioma;
 import com.lna.literalura.model.Libro;
 import com.lna.literalura.service.AutorService;
 import com.lna.literalura.service.ConsumoGutendexAPI;
@@ -54,6 +55,7 @@ public class Principal {
                     mostrarAutoresVivosEnAnio();
                     break;
                 case "5":
+                    mostrarLibrosPorIdioma();
                     break;
                 case "0":
                     System.out.println("Cerrando la aplicación...");
@@ -131,6 +133,34 @@ public class Principal {
             });
         } else {
             System.out.println("No hay autores vivos registrados en el año ingresado.");
+        }
+    }
+
+    private void mostrarIdiomas() {
+        System.out.println("\nIngrese el idioma:" +
+            "\nes - Español" +
+            "\nen - Inglés" +
+            "\npt - Portugués" +
+            "\nfr - Francés" +
+            "\nit - Italiano");
+    }
+
+    private void mostrarLibrosPorIdioma() {
+        mostrarIdiomas();
+        System.out.println("\nIngrese el idioma que desea buscar: ");
+        var idiomaBuscado = scanner.nextLine();
+
+        Idioma idioma = null;
+        try {
+            idioma = Idioma.valueOf(idiomaBuscado);
+            List<Libro> libros = libroService.obtenerLibrosPorIdioma(idioma);
+            if (!libros.isEmpty()) {
+                libros.forEach(System.out::println);
+            } else {
+                System.out.println("No hay libros en el idioma ingresado.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("El idioma ingresado no existe.");
         }
     }
 

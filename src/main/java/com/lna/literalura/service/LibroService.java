@@ -3,6 +3,7 @@ package com.lna.literalura.service;
 import com.lna.literalura.model.Autor;
 import com.lna.literalura.model.DatosAutor;
 import com.lna.literalura.model.DatosLibro;
+import com.lna.literalura.model.Idioma;
 import com.lna.literalura.model.Libro;
 import com.lna.literalura.repository.AutorRepository;
 import com.lna.literalura.repository.LibroRepository;
@@ -52,5 +53,9 @@ public class LibroService {
 
     public List<Libro> obtenerLibrosPorAutor(Autor autor) {
         return libroRepository.librosDeAutor(autor);
+    }
+
+    public List<Libro> obtenerLibrosPorIdioma(Idioma idioma) {
+        return libroRepository.librosEnIdioma(idioma);
     }
 }

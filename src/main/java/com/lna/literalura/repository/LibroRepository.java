@@ -1,6 +1,7 @@
 package com.lna.literalura.repository;
 
 import com.lna.literalura.model.Autor;
+import com.lna.literalura.model.Idioma;
 import com.lna.literalura.model.Libro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +14,7 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
 
     @Query("SELECT l FROM Libro l WHERE l.autor = :autor")
     List<Libro> librosDeAutor(Autor autor);
+
+    @Query("SELECT l FROM Libro l WHERE l.idioma = :idioma")
+    List<Libro> librosEnIdioma(Idioma idioma);
 }
