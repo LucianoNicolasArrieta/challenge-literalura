@@ -1,5 +1,6 @@
 package com.lna.literalura.principal;
 
+import com.lna.literalura.model.Autor;
 import com.lna.literalura.model.DatosLibro;
 import com.lna.literalura.model.Libro;
 import com.lna.literalura.service.AutorService;
@@ -8,6 +9,7 @@ import com.lna.literalura.service.ConvierteDatos;
 import com.lna.literalura.service.LibroService;
 import java.util.Scanner;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Principal {
     private Scanner scanner = new Scanner(System.in);
@@ -45,6 +47,7 @@ public class Principal {
                     mostrarLibros();
                     break;
                 case "3":
+                    mostrarAutores();
                     break;
                 case "4":
                     break;
@@ -88,6 +91,16 @@ public class Principal {
         libros.forEach(System.out::println);
     }
 
-
+    private void mostrarAutores() {
+        List<Autor> autores = autorService.obtenerTodos();
+        autores.forEach(autor -> {
+            System.out.println("\n------- AUTOR -------" +
+                "\nNombre: " + autor.getApellido() + ", " + autor.getNombre() +
+                "\nAño de nacimiento: " + autor.getAnioDeNacimiento() +
+                "\nAño de fallecimiento: " + autor.getAnioDeFallecimiento() +
+                "\nLibros: " + libroService.obtenerLibrosPorAutor(autor).stream().map(Libro::getTitulo).toList() +
+                "\n----------------------");
+        });
+    }
 
 }

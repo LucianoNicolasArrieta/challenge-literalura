@@ -50,4 +50,7 @@ public class LibroService {
         return libroRepository.findAll();
     }
 
+    public List<Libro> obtenerLibrosPorAutor(Autor autor) {
+        return libroRepository.librosDeAutor(autor);
+    }
 }
