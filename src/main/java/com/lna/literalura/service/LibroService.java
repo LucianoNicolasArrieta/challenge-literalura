@@ -9,6 +9,7 @@ import com.lna.literalura.repository.LibroRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,6 +44,10 @@ public class LibroService {
         libroRepository.save(libro);
 
         System.out.println(libro);
+    }
+
+    public List<Libro> obtenerTodos() {
+        return libroRepository.findAll();
     }
 
 }

@@ -1,12 +1,13 @@
 package com.lna.literalura.principal;
 
-import com.lna.literalura.model.Autor;
 import com.lna.literalura.model.DatosLibro;
+import com.lna.literalura.model.Libro;
 import com.lna.literalura.service.AutorService;
 import com.lna.literalura.service.ConsumoGutendexAPI;
 import com.lna.literalura.service.ConvierteDatos;
 import com.lna.literalura.service.LibroService;
 import java.util.Scanner;
+import java.util.List;
 
 public class Principal {
     private Scanner scanner = new Scanner(System.in);
@@ -41,6 +42,7 @@ public class Principal {
                     buscarLibro();
                     break;
                 case "2":
+                    mostrarLibros();
                     break;
                 case "3":
                     break;
@@ -80,5 +82,12 @@ public class Principal {
             libroService.crearYGuardarLibro(datosLibro);
         }
     }
+
+    private void mostrarLibros() {
+        List<Libro> libros = libroService.obtenerTodos();
+        libros.forEach(System.out::println);
+    }
+
+
 
 }

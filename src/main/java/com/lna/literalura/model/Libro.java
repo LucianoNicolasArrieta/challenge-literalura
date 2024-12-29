@@ -95,7 +95,7 @@ public class Libro {
     @Override
     public String toString() {
 
-        return "------- LIBRO -------" +
+        return "\n------- LIBRO -------" +
             "\nTítulo: " + titulo +
             "\nAutor: " + autor +
             "\nIdioma: " + idioma +
