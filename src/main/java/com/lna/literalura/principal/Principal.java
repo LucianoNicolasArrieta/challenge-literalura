@@ -7,6 +7,7 @@ import com.lna.literalura.service.AutorService;
 import com.lna.literalura.service.ConsumoGutendexAPI;
 import com.lna.literalura.service.ConvierteDatos;
 import com.lna.literalura.service.LibroService;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,6 +51,7 @@ public class Principal {
                     mostrarAutores();
                     break;
                 case "4":
+                    mostrarAutoresVivosEnAnio();
                     break;
                 case "5":
                     break;
@@ -101,6 +103,35 @@ public class Principal {
                 "\nLibros: " + libroService.obtenerLibrosPorAutor(autor).stream().map(Libro::getTitulo).toList() +
                 "\n----------------------");
         });
+    }
+
+    private void mostrarAutoresVivosEnAnio() {
+        boolean entradaInvalida = true;
+        int anio = 0;
+        while (entradaInvalida) {
+            try {
+                System.out.println("Ingrese el año:");
+                anio = scanner.nextInt();
+                scanner.nextLine();
+                entradaInvalida = false;
+            } catch (InputMismatchException e) {
+                System.out.println("El año ingresado debe ser un entero. Inténtelo de nuevo.");
+                scanner.nextLine();
+            }
+        }
+        List<Autor> autores = autorService.obtenerAutoresVivosEn(anio);
+        if (!autores.isEmpty()) {
+            autores.forEach(autor -> {
+                System.out.println("\n------- AUTOR -------" +
+                    "\nNombre: " + autor.getApellido() + ", " + autor.getNombre() +
+                    "\nAño de nacimiento: " + autor.getAnioDeNacimiento() +
+                    "\nAño de fallecimiento: " + autor.getAnioDeFallecimiento() +
+                    "\nLibros: " + libroService.obtenerLibrosPorAutor(autor).stream().map(Libro::getTitulo).toList() +
+                    "\n----------------------");
+            });
+        } else {
+            System.out.println("No hay autores vivos registrados en el año ingresado.");
+        }
     }
 
 }

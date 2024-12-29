@@ -14,4 +14,8 @@ public class AutorService {
     public List<Autor> obtenerTodos() {
         return autorRepository.findAll();
     }
+
+    public List<Autor> obtenerAutoresVivosEn(int anio) {
+        return autorRepository.findAutorVivosEn(anio);
+    }
 }
