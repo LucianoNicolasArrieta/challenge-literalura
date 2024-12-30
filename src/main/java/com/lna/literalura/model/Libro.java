@@ -26,13 +26,6 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinTable(
-//        name = "libro_autor",
-//        joinColumns = @JoinColumn(name = "libro_id"),
-//        inverseJoinColumns = @JoinColumn(name = "autor_id")
-//    )
-//    private List<Autor> autores = new ArrayList<>();
     @ManyToOne(cascade = CascadeType.ALL)
     private Autor autor;
     @Enumerated(EnumType.STRING)
@@ -46,6 +39,7 @@ public class Libro {
 
         // Requerimiento de quedarse solo con el primer autor
         //this.autor = new Autor(datosLibro.autores().get(0));
+        
         // Requerimiento de quedarse solo con el primero de los idiomas
         this.idioma = Idioma.valueOf(datosLibro.idiomas().get(0));
 

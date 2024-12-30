@@ -18,4 +18,8 @@ public class AutorService {
     public List<Autor> obtenerAutoresVivosEn(int anio) {
         return autorRepository.findAutorVivosEn(anio);
     }
+
+    public List<Autor> obtenerAutoresPorNombre(String nombre) {
+        return autorRepository.buscarAutorPorNombre(nombre);
+    }
 }

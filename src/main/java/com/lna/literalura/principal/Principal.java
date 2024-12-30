@@ -40,6 +40,7 @@ public class Principal {
                     6 - Ver estadisticas de descargas sobre los libros registrados
                     7 - Top 10 libros mas descargados (contando no registrados)
                     8 - Top 10 libros mas descargados (contando solo registrados)
+                    9 - Buscar autor registrado por nombre
                     
                     0 - Salir
                     ************************************************
@@ -73,6 +74,9 @@ public class Principal {
                     break;
                 case "8":
                     buscarTop10LibrosRegistrados();
+                    break;
+                case "9":
+                    buscarAutorPorNombre();
                     break;
                 case "0":
                     System.out.println("Cerrando la aplicación...");
@@ -212,5 +216,17 @@ public class Principal {
         top10Libros.forEach(System.out::println);
     }
 
+    private void buscarAutorPorNombre() {
+        System.out.println("¿Qué autor desea buscar?: ");
+        String nombre = scanner.nextLine();
+
+        List<Autor> autores = autorService.obtenerAutoresPorNombre(nombre);
+
+        if (!autores.isEmpty()) {
+            autores.forEach(System.out::println);
+        } else {
+            System.out.println("No hay coincidencias. Si desea registrar un autor, registre un libro suyo con la primera opción del menú.");
+        }
+    }
 
 }
