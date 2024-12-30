@@ -67,8 +67,15 @@ public class Autor {
         this.anioDeFallecimiento = anioDeFallecimiento;
     }
 
+    public String nombreCompleto() {
+        return apellido + ", " + nombre;
+    }
+
     @Override
     public String toString() {
-        return apellido + ", " + nombre;
+        return "\n------- AUTOR -------" +
+            "\nNombre: " + apellido + ", " + nombre +
+            "\nAño de nacimiento: " + anioDeNacimiento +
+            "\nAño de fallecimiento: " + anioDeFallecimiento;
     }
 }

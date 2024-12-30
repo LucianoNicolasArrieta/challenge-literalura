@@ -8,7 +8,9 @@ import com.lna.literalura.service.AutorService;
 import com.lna.literalura.service.ConsumoGutendexAPI;
 import com.lna.literalura.service.ConvierteDatos;
 import com.lna.literalura.service.LibroService;
+import java.util.DoubleSummaryStatistics;
 import java.util.InputMismatchException;
+import java.util.IntSummaryStatistics;
 import java.util.Scanner;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +36,7 @@ public class Principal {
                     3 - Listar autores registrados
                     4 - Listar autores vivos en un determinado año
                     5 - Listar libros por idioma
+                    6 - Ver estadisticas de descargas sobre los libros registrados
                     
                     0 - Salir
                     """;
@@ -56,6 +59,9 @@ public class Principal {
                     break;
                 case "5":
                     mostrarLibrosPorIdioma();
+                    break;
+                case "6":
+                    mostrarEstadisticas();
                     break;
                 case "0":
                     System.out.println("Cerrando la aplicación...");
@@ -98,10 +104,7 @@ public class Principal {
     private void mostrarAutores() {
         List<Autor> autores = autorService.obtenerTodos();
         autores.forEach(autor -> {
-            System.out.println("\n------- AUTOR -------" +
-                "\nNombre: " + autor.getApellido() + ", " + autor.getNombre() +
-                "\nAño de nacimiento: " + autor.getAnioDeNacimiento() +
-                "\nAño de fallecimiento: " + autor.getAnioDeFallecimiento() +
+            System.out.println(autor +
                 "\nLibros: " + libroService.obtenerLibrosPorAutor(autor).stream().map(Libro::getTitulo).toList() +
                 "\n----------------------");
         });
@@ -124,10 +127,7 @@ public class Principal {
         List<Autor> autores = autorService.obtenerAutoresVivosEn(anio);
         if (!autores.isEmpty()) {
             autores.forEach(autor -> {
-                System.out.println("\n------- AUTOR -------" +
-                    "\nNombre: " + autor.getApellido() + ", " + autor.getNombre() +
-                    "\nAño de nacimiento: " + autor.getAnioDeNacimiento() +
-                    "\nAño de fallecimiento: " + autor.getAnioDeFallecimiento() +
+                System.out.println(autor +
                     "\nLibros: " + libroService.obtenerLibrosPorAutor(autor).stream().map(Libro::getTitulo).toList() +
                     "\n----------------------");
             });
@@ -150,9 +150,8 @@ public class Principal {
         System.out.println("\nIngrese el idioma que desea buscar: ");
         var idiomaBuscado = scanner.nextLine();
 
-        Idioma idioma = null;
         try {
-            idioma = Idioma.valueOf(idiomaBuscado);
+            Idioma idioma = Idioma.valueOf(idiomaBuscado);
             List<Libro> libros = libroService.obtenerLibrosPorIdioma(idioma);
             if (!libros.isEmpty()) {
                 libros.forEach(System.out::println);
@@ -163,5 +162,18 @@ public class Principal {
             System.out.println("El idioma ingresado no existe.");
         }
     }
+
+    private void mostrarEstadisticas() {
+        List<Libro> libros = libroService.obtenerTodos();
+        IntSummaryStatistics estadisticas = libros.stream().collect(Collectors.summarizingInt(Libro::getCantidadDescargas));
+        System.out.println("------- Estadisticas -------" +
+            "\nLas estadisticas fueron generadas sobre los" + estadisticas.getCount() + " libros registrados" +
+            "\nCantidad promedio de descargas: " + (int) estadisticas.getAverage() +
+            "\nCantidad mas alta de descargas: " + estadisticas.getMax() +
+            "\nCantidad mas baja de descargas: " + estadisticas.getMin() +
+            "\n---------------------");
+
+    }
+
 
 }
