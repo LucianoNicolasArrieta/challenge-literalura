@@ -58,4 +58,8 @@ public class LibroService {
     public List<Libro> obtenerLibrosPorIdioma(Idioma idioma) {
         return libroRepository.librosEnIdioma(idioma);
     }
+
+    public List<Libro> obtenerTop10() {
+        return libroRepository.top10Libros();
+    }
 }

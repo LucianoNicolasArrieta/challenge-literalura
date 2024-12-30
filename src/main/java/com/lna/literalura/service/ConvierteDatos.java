@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lna.literalura.model.DatosLibro;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConvierteDatos {
     private ObjectMapper mapper = new ObjectMapper();
 
-    public DatosLibro obtenerDatos(String resultadosBusqueda) {
+    public DatosLibro obtenerDatosLibro(String resultadosBusqueda) {
         DatosLibro datosLibro = null;
 
         try {
@@ -24,5 +26,22 @@ public class ConvierteDatos {
         }
 
         return datosLibro;
+    }
+
+    public List<DatosLibro> obtenerDatosTop10Libros(String resultadosBusqueda) {
+        List<DatosLibro> datosLibroTop10 = new ArrayList<>();
+
+        try {
+            JsonNode resultados = mapper.readTree(resultadosBusqueda);
+            JsonNode resultado = resultados.get("results");
+            for (int i = 0; i <= 9; i++) {
+                JsonNode resultadoLibro = resultado.get(i);
+                datosLibroTop10.add(mapper.treeToValue(resultadoLibro, DatosLibro.class));
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return datosLibroTop10;
     }
 }

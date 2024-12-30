@@ -99,6 +99,6 @@ public class Libro {
             "\nAutor: " + autor.nombreCompleto() +
             "\nIdioma: " + idioma +
             "\nCantidad de descargas: " + cantidadDescargas +
-            "\n----------------------";
+            "\n---------------------";
     }
 }

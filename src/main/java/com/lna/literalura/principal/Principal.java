@@ -8,7 +8,7 @@ import com.lna.literalura.service.AutorService;
 import com.lna.literalura.service.ConsumoGutendexAPI;
 import com.lna.literalura.service.ConvierteDatos;
 import com.lna.literalura.service.LibroService;
-import java.util.DoubleSummaryStatistics;
+import org.hibernate.event.spi.SaveOrUpdateEvent;
 import java.util.InputMismatchException;
 import java.util.IntSummaryStatistics;
 import java.util.Scanner;
@@ -31,17 +31,22 @@ public class Principal {
         var opcion = "";
         while (!opcion.equals("0")) {
             var menu = """
+                    \n****************** LITERALURA ****************** 
                     \n1 - Buscar libro por título
                     2 - Listar libros registrados
                     3 - Listar autores registrados
                     4 - Listar autores vivos en un determinado año
                     5 - Listar libros por idioma
                     6 - Ver estadisticas de descargas sobre los libros registrados
+                    7 - Top 10 libros mas descargados (contando no registrados)
+                    8 - Top 10 libros mas descargados (contando solo registrados)
                     
                     0 - Salir
+                    ************************************************
                     """;
 
             System.out.println(menu);
+            System.out.println("Seleccione una opción: ");
             opcion = scanner.nextLine();
 
             switch (opcion) {
@@ -63,6 +68,12 @@ public class Principal {
                 case "6":
                     mostrarEstadisticas();
                     break;
+                case "7":
+                    buscarTop10Libros();
+                    break;
+                case "8":
+                    buscarTop10LibrosRegistrados();
+                    break;
                 case "0":
                     System.out.println("Cerrando la aplicación...");
                     break;
@@ -75,7 +86,7 @@ public class Principal {
 
     private DatosLibro obtenerDatosLibro(String titulo) {
         String jsonResultados = consumoAPI.obtenerDatos("https://gutendex.com/books/?search=" + titulo.replace(" ", "%20"));
-        DatosLibro datosLibro = conversor.obtenerDatos(jsonResultados);
+        DatosLibro datosLibro = conversor.obtenerDatosLibro(jsonResultados);
 
         return datosLibro;
     }
@@ -171,8 +182,34 @@ public class Principal {
             "\nCantidad promedio de descargas: " + (int) estadisticas.getAverage() +
             "\nCantidad mas alta de descargas: " + estadisticas.getMax() +
             "\nCantidad mas baja de descargas: " + estadisticas.getMin() +
-            "\n---------------------");
+            "\n----------------------------");
 
+    }
+
+    private List<DatosLibro> obtenerDatosTop10Libros() {
+        String jsonResultados = consumoAPI.obtenerDatos("https://gutendex.com/books/?sort=popular");
+        List<DatosLibro> datosLibros = conversor.obtenerDatosTop10Libros(jsonResultados);
+
+        return datosLibros;
+    }
+
+    private void buscarTop10Libros() {
+        System.out.println("Buscando datos sobre el top 10 mas descargados...");
+        List<DatosLibro> datosLibros = obtenerDatosTop10Libros();
+
+        for (DatosLibro datosLibro : datosLibros) {
+            System.out.println("\n------- LIBRO -------" +
+                "\nTítulo: " + datosLibro.titulo() +
+                "\nAutor: " + datosLibro.autores().get(0).nombreCompleto() +
+                "\nIdioma: " + datosLibro.idiomas().get(0) +
+                "\nCantidad de descargas: " + datosLibro.cantidadDescargas() +
+                "\n---------------------");
+        }
+    }
+
+    private void buscarTop10LibrosRegistrados() {
+        List<Libro> top10Libros = libroService.obtenerTop10();
+        top10Libros.forEach(System.out::println);
     }
 
 
