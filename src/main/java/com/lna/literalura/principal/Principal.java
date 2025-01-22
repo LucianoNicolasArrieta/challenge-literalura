@@ -107,6 +107,7 @@ public class Principal {
             System.out.println("El libro ya se encuentra registrado en el sistema. No se puede registrar el mismo libro mas de una vez.");
         } else {
             Libro libro = libroService.crearYGuardarLibro(datosLibro);
+            System.out.println("Libro registrado con éxito.");
             System.out.println(libro);
         }
         presioneEnterParaContinuar();
@@ -188,8 +189,8 @@ public class Principal {
     private void mostrarEstadisticas() {
         List<Libro> libros = libroService.obtenerTodos();
         IntSummaryStatistics estadisticas = libros.stream().collect(Collectors.summarizingInt(Libro::getCantidadDescargas));
-        System.out.println("------- Estadisticas -------" +
-            "\nLas estadisticas fueron generadas sobre los" + estadisticas.getCount() + " libros registrados" +
+        System.out.println("\n------- Estadisticas -------" +
+            "\nLas estadisticas fueron generadas sobre los " + estadisticas.getCount() + " libros registrados" +
             "\nCantidad promedio de descargas: " + (int) estadisticas.getAverage() +
             "\nCantidad mas alta de descargas: " + estadisticas.getMax() +
             "\nCantidad mas baja de descargas: " + estadisticas.getMin() +
