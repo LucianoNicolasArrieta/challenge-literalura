@@ -1,4 +1,4 @@
-package com.lna.literalura.model;
+package com.lna.literalura.model.autor;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

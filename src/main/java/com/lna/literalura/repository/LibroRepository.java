@@ -1,8 +1,8 @@
 package com.lna.literalura.repository;
 
-import com.lna.literalura.model.Autor;
-import com.lna.literalura.model.Idioma;
-import com.lna.literalura.model.Libro;
+import com.lna.literalura.model.autor.Autor;
+import com.lna.literalura.model.libro.Idioma;
+import com.lna.literalura.model.libro.Libro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

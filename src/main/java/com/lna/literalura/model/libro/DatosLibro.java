@@ -1,7 +1,8 @@
-package com.lna.literalura.model;
+package com.lna.literalura.model.libro;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.lna.literalura.model.autor.DatosAutor;
 import java.util.ArrayList;
 import java.util.List;
 

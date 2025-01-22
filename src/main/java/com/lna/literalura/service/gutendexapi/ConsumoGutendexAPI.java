@@ -1,4 +1,4 @@
-package com.lna.literalura.service;
+package com.lna.literalura.service.gutendexapi;
 
 import java.io.IOException;
 import java.net.URI;

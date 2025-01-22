@@ -1,4 +1,4 @@
-package com.lna.literalura.model;
+package com.lna.literalura.model.autor;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 

@@ -1,9 +1,9 @@
-package com.lna.literalura.service;
+package com.lna.literalura.service.gutendexapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lna.literalura.model.DatosLibro;
+import com.lna.literalura.model.libro.DatosLibro;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.lna.literalura.model;
+package com.lna.literalura.model.libro;
 
 public enum Idioma {
     en,

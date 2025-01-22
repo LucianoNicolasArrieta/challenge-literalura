@@ -1,14 +1,13 @@
 package com.lna.literalura.principal;
 
-import com.lna.literalura.model.Autor;
-import com.lna.literalura.model.DatosLibro;
-import com.lna.literalura.model.Idioma;
-import com.lna.literalura.model.Libro;
+import com.lna.literalura.model.autor.Autor;
+import com.lna.literalura.model.libro.DatosLibro;
+import com.lna.literalura.model.libro.Idioma;
+import com.lna.literalura.model.libro.Libro;
 import com.lna.literalura.service.AutorService;
-import com.lna.literalura.service.ConsumoGutendexAPI;
-import com.lna.literalura.service.ConvierteDatos;
+import com.lna.literalura.service.gutendexapi.ConsumoGutendexAPI;
+import com.lna.literalura.service.gutendexapi.ConvierteDatos;
 import com.lna.literalura.service.LibroService;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
 import java.util.InputMismatchException;
 import java.util.IntSummaryStatistics;
 import java.util.Scanner;
@@ -107,13 +106,16 @@ public class Principal {
         } else if (libroService.libroYaExiste(datosLibro.titulo())) {
             System.out.println("El libro ya se encuentra registrado en el sistema. No se puede registrar el mismo libro mas de una vez.");
         } else {
-            libroService.crearYGuardarLibro(datosLibro);
+            Libro libro = libroService.crearYGuardarLibro(datosLibro);
+            System.out.println(libro);
         }
+        presioneEnterParaContinuar();
     }
 
     private void mostrarLibros() {
         List<Libro> libros = libroService.obtenerTodos();
         libros.forEach(System.out::println);
+        presioneEnterParaContinuar();
     }
 
     private void mostrarAutores() {
@@ -123,6 +125,7 @@ public class Principal {
                 "\nLibros: " + libroService.obtenerLibrosPorAutor(autor).stream().map(Libro::getTitulo).toList() +
                 "\n----------------------");
         });
+        presioneEnterParaContinuar();
     }
 
     private void mostrarAutoresVivosEnAnio() {
@@ -139,6 +142,7 @@ public class Principal {
                 scanner.nextLine();
             }
         }
+
         List<Autor> autores = autorService.obtenerAutoresVivosEn(anio);
         if (!autores.isEmpty()) {
             autores.forEach(autor -> {
@@ -149,6 +153,7 @@ public class Principal {
         } else {
             System.out.println("No hay autores vivos registrados en el año ingresado.");
         }
+        presioneEnterParaContinuar();
     }
 
     private void mostrarIdiomas() {
@@ -176,6 +181,8 @@ public class Principal {
         } catch (IllegalArgumentException e) {
             System.out.println("El idioma ingresado no existe.");
         }
+
+        presioneEnterParaContinuar();
     }
 
     private void mostrarEstadisticas() {
@@ -188,6 +195,7 @@ public class Principal {
             "\nCantidad mas baja de descargas: " + estadisticas.getMin() +
             "\n----------------------------");
 
+        presioneEnterParaContinuar();
     }
 
     private List<DatosLibro> obtenerDatosTop10Libros() {
@@ -209,11 +217,14 @@ public class Principal {
                 "\nCantidad de descargas: " + datosLibro.cantidadDescargas() +
                 "\n---------------------");
         }
+
+        presioneEnterParaContinuar();
     }
 
     private void buscarTop10LibrosRegistrados() {
         List<Libro> top10Libros = libroService.obtenerTop10();
         top10Libros.forEach(System.out::println);
+        presioneEnterParaContinuar();
     }
 
     private void buscarAutorPorNombre() {
@@ -227,6 +238,12 @@ public class Principal {
         } else {
             System.out.println("No hay coincidencias. Si desea registrar un autor, registre un libro suyo con la primera opción del menú.");
         }
+
+        presioneEnterParaContinuar();
     }
 
+    private void presioneEnterParaContinuar() {
+        System.out.println("\nPresiona enter para continuar ... ");
+        scanner.nextLine();
+    }
 }
