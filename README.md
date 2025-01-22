@@ -111,7 +111,7 @@ A continuación se muestra el Diagrama Entidad-Relacion (DER) del sistema:
 
 ---
 
-## Ideas de Imágenes 🖼️
+## Imágenes 🖼️
 
 Algunas imagenes de la aplicación corriendo en la consola:
 
